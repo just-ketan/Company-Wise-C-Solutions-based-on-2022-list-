@@ -1,0 +1,37 @@
+/*
+Given an m x n binary matrix filled with 0's and 1's, find the largest square containing only 1's and return its area.
+*/
+
+
+
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        // this feels like classic dp[i][j] pattern
+        // dp[i][j] represents the bottom right corner of the maximum possible square (i,j)
+        
+        int rows = matrix.size();
+        int cols = matrix[0].size();
+
+        vector<vector<int>> dp(rows+1, vector<int>(cols+1,0));
+        // dp table of size n+1
+
+        int maxx = 0;
+
+        /*
+            now if dp[i][j]  is bottom right corner
+                -- there must be upper square filled (dp[i-1][j])
+                -- there must be left square filler (dp[i][j-1])
+                -- there must be upper left sqaure filled (dp[i-1][j-1])
+        */
+        for(int i=0; i<rows; i++){
+            for(int j=0; j<cols; j++){
+                if(matrix[i][j] == '1'){
+                    dp[i+1][j+1] = min({dp[i][j+1], dp[i+1][j], dp[i][j]}) + 1;
+                }
+                maxx = max(maxx, dp[i+1][j+1]);
+            }
+        }
+        return maxx*maxx;
+    }
+};
